@@ -258,7 +258,7 @@ end
 --------------------------------------------------------------------------------
 
 function Frame:SetFrameScale(newScale, scaleAnchored)
-    newScale = tonumber(newScale) or 1
+    newScale = math.max(tonumber(newScale) or 1, 0.01)
 
     self.sets.scale = newScale
 
@@ -271,7 +271,7 @@ function Frame:SetFrameScale(newScale, scaleAnchored)
 end
 
 function Frame:GetFrameScale()
-    return self.sets.scale or 1
+    return math.max(tonumber(self.sets.scale) or 1, 0.01)
 end
 
 --------------------------------------------------------------------------------
@@ -458,38 +458,39 @@ end
 --------------------------------------------------------------------------------
 
 function Frame:ShowFrame()
-    self.sets.hidden = nil
-
-    self:SetAttribute('state-hidden', nil)
-    self:UpdateWatched()
-    self:UpdateAlpha()
-
-    if Addon:IsLinkedOpacityEnabled() then
-        self:ForAnchored('ShowFrame')
-    end
+    self:SetShown(true)
 end
 
 function Frame:HideFrame()
-    self.sets.hidden = true
+    self:SetShown(false)
+end
 
-    self:SetAttribute('state-hidden', true)
+function Frame:ToggleFrame()
+    self:SetShown(not self:GetShown())
+end
+
+function Frame:FrameIsShown()
+    return self:GetShown()
+end
+
+function Frame:SetShown(show)
+    if show then
+        self.sets.hidden = nil
+        self:SetAttribute('state-hidden', nil)
+    else
+        self.sets.hidden = true
+        self:SetAttribute('state-hidden', true)
+    end
+
     self:UpdateWatched()
     self:UpdateAlpha()
 
     if Addon:IsLinkedOpacityEnabled() then
-        self:ForAnchored('HideFrame')
+        self:ForAnchored('SetShown', show)
     end
 end
 
-function Frame:ToggleFrame()
-    if self:FrameIsShown() then
-        self:HideFrame()
-    else
-        self:ShowFrame()
-    end
-end
-
-function Frame:FrameIsShown()
+function Frame:GetShown()
     return not self.sets.hidden
 end
 

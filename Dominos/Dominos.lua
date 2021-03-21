@@ -348,15 +348,21 @@ function Addon:ShowOptionsFrame()
 end
 
 function Addon:NewMenu()
+    if self:LoadConfigAddon() then
+        return self.Options.Menu:New()
+    end
+end
+
+function Addon:LoadConfigAddon()
     if not self:IsConfigAddonEnabled() then
-        return
+        return false
     end
 
-    if not IsAddOnLoaded(CONFIG_ADDON_NAME) then
-        LoadAddOn(CONFIG_ADDON_NAME)
+    if IsAddOnLoaded(CONFIG_ADDON_NAME) then
+        return true
     end
 
-    return self.Options.Menu:New()
+    return LoadAddOn(CONFIG_ADDON_NAME)
 end
 
 function Addon:IsConfigAddonEnabled()

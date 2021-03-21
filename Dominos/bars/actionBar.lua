@@ -144,7 +144,6 @@ function ActionBar:GetOffset(stateId)
     return self.pages[stateId]
 end
 
-
 function ActionBar:UpdateStateDriver()
     local conditions
 
@@ -280,14 +279,28 @@ function ActionBar:UpdateTransparent(force)
 end
 
 -- flyout direction calculations
+function ActionBar:SetFlyoutDirection(direction)
+    local oldDirection = self.sets.flyoutDirection or 'auto'
+    local newDirection = direction or 'auto'
+
+    if oldDirection ~= newDirection then
+        self.sets.flyoutDirection = newDirection
+        self:UpdateFlyoutDirection()
+    end
+end
+
 function ActionBar:GetFlyoutDirection()
-    local direction = self.sets.flyoutDirection or 'auto'
+    return self.sets.flyoutDirection or 'auto'
+end
+
+function ActionBar:UpdateFlyoutDirection()
+    local direction = self:GetFlyoutDirection()
 
     if direction == 'auto' then
-        return self:GetCalculatedFlyoutDirection()
+        direction = self:GetCalculatedFlyoutDirection()
     end
 
-    return direction
+    self:ForButtons('SetFlyoutDirection', direction)
 end
 
 function ActionBar:GetCalculatedFlyoutDirection()
@@ -308,18 +321,10 @@ function ActionBar:GetCalculatedFlyoutDirection()
     return 'UP'
 end
 
-function ActionBar:SetFlyoutDirection(direction)
-    local oldDirection = self.sets.flyoutDirection or 'auto'
-    local newDirection = direction or 'auto'
-
-    if oldDirection ~= newDirection then
-        self.sets.flyoutDirection = newDirection
-        self:UpdateFlyoutDirection()
+function ActionBar:ShowMenu()
+    if Addon:LoadConfigAddon() then
+        Addon.Options.ContextMenu:Show(self)
     end
-end
-
-function ActionBar:UpdateFlyoutDirection()
-    self:ForButtons('SetFlyoutDirection', self:GetFlyoutDirection())
 end
 
 ActionBar:Extend("Layout", ActionBar.UpdateFlyoutDirection)

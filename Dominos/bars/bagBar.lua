@@ -86,38 +86,46 @@ function BagBar:NumButtons()
     return count
 end
 
-function BagBar:OnCreateMenu(menu)
-    local L = LibStub('AceLocale-3.0'):GetLocale('Dominos-Config')
-
-    local layoutPanel = menu:NewPanel(L.Layout)
-
-    layoutPanel:NewCheckButton {
-        name = L.BagBarShowBags,
-        get = function()
-            return layoutPanel.owner:ShowBags()
-        end,
-        set = function(_, enable)
-            return layoutPanel.owner:SetShowBags(enable)
-        end
-    }
-
-    if Addon:IsBuild('Classic') then
-        layoutPanel:NewCheckButton {
-            name = L.BagBarShowKeyRing,
-            get = function()
-                return layoutPanel.owner:ShowKeyRing()
-            end,
-            set = function(_, enable)
-                return layoutPanel.owner:SetShowKeyRing(enable)
-            end
-        }
+function BagBar:ShowMenu()
+    if Addon:LoadConfigAddon() then
+        Addon.Options.ContextMenu:Show(self)
     end
-
-    layoutPanel:AddLayoutOptions()
-
-    menu:AddFadingPanel()
-    menu:AddAdvancedPanel()
 end
+
+Addon.BagBar = BagBar
+
+-- function BagBar:OnCreateMenu(menu)
+--     local L = LibStub('AceLocale-3.0'):GetLocale('Dominos-Config')
+
+--     local layoutPanel = menu:NewPanel(L.Layout)
+
+--     layoutPanel:NewCheckButton {
+--         name = L.BagBarShowBags,
+--         get = function()
+--             return layoutPanel.owner:ShowBags()
+--         end,
+--         set = function(_, enable)
+--             return layoutPanel.owner:SetShowBags(enable)
+--         end
+--     }
+
+--     if Addon:IsBuild('Classic') then
+--         layoutPanel:NewCheckButton {
+--             name = L.BagBarShowKeyRing,
+--             get = function()
+--                 return layoutPanel.owner:ShowKeyRing()
+--             end,
+--             set = function(_, enable)
+--                 return layoutPanel.owner:SetShowKeyRing(enable)
+--             end
+--         }
+--     end
+
+--     layoutPanel:AddLayoutOptions()
+
+--     menu:AddFadingPanel()
+--     menu:AddAdvancedPanel()
+-- end
 
 --------------------------------------------------------------------------------
 --	module

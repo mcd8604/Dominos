@@ -21,3 +21,6 @@ options\profiles.lua
 overlay\ui.lua
 overlay\dragFrame.lua
 overlay\help.lua
+contextMenus\main.lua
+contextMenus\actionBar.lua
+contextMenus\bagBar.lua

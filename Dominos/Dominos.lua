@@ -762,7 +762,7 @@ end
 function Addon:GetWowBuild()
     local project = WOW_PROJECT_ID
 
-    if project == WOW_PROJECT_CLASSIC then
+    if project == WOW_PROJECT_CLASSIC or project == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
         return 'classic'
     end
 
